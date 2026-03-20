@@ -1,2 +1,1 @@
-# homepage
-My HomePage
+# sunghyok3.github.io
