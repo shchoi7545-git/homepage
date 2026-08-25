@@ -1,137 +1,418 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>안녕하세요 도우네 공간 입니다</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Roboto', sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f7f6;
-            color: #333;
-            line-height: 1.6;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>농산물경매 - 전국 도매시장 경매가 조회</title>
+<meta name="description" content="전국 도매시장·법인 경매 데이터를 매일 자동 수집해 품목별 시세, 품종별 최고가를 보여주는 농산물경매 앱 소개 페이지">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=Sixtyfour&display=swap" rel="stylesheet">
+<style>
+  /* ============================================================
+     토큰
+     - board(헤더+히어로)는 실제 경매 전광판을 본뜬 고정 다크 화면으로,
+       뷰어 테마와 무관하게 항상 같은 모습을 유지하는 의도된 디자인입니다.
+     - 그 아래 본문(paper)은 라이트/다크 두 테마 모두 지원합니다.
+     ============================================================ */
+  :root {
+    --paper: #F5F7F1;
+    --paper-raised: #FFFFFF;
+    --paper-line: #DCE3D5;
+    --ink: #16211A;
+    --ink-sub: #57685C;
+    --ink-faint: #8B9B8E;
+    --brand: #029F48;
+    --brand-deep: #1B5E20;
+    --brand-tint: #E4F3E7;
+    --focus-ring: #0B6E33;
 
-        .container {
-            max-width: 960px;
-            margin: 0 auto;
-            padding: 20px;
-        }
+    --board-bg: #0F1716;
+    --board-bg-2: #0A0F0E;
+    --board-line: rgba(244, 247, 241, 0.12);
+    --board-ink: #F4F7F1;
+    --board-ink-sub: #9DB2A2;
+    --led: #FF8A2B;
+    --led-dim: #B8632090;
 
-        header {
-            background-color: #fff;
-            padding: 40px;
-            text-align: center;
-            border-bottom: 2px solid #ddd;
-        }
+    --font-display: "Black Han Sans", "Apple SD Gothic Neo", sans-serif;
+    --font-body: "IBM Plex Sans KR", -apple-system, BlinkMacSystemFont, "Malgun Gothic", "Apple SD Gothic Neo", sans-serif;
+    --font-mono: "Sixtyfour", "IBM Plex Mono", "SF Mono", Consolas, monospace;
 
-        header h1 {
-            color: #2c3e50;
-            margin: 0;
-            font-size: 2.5rem;
-        }
+    --max-width: 1120px;
+  }
 
-        header p {
-            color: #7f8c8d;
-            font-size: 1.1rem;
-        }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #121A15;
+      --paper-raised: #17211B;
+      --paper-line: #29362D;
+      --ink: #E9F1E9;
+      --ink-sub: #9FB2A3;
+      --ink-faint: #6E8074;
+      --brand: #46CE7E;
+      --brand-deep: #7FE3A6;
+      --brand-tint: #17301F;
+      --focus-ring: #6FE3A0;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #121A15;
+    --paper-raised: #17211B;
+    --paper-line: #29362D;
+    --ink: #E9F1E9;
+    --ink-sub: #9FB2A3;
+    --ink-faint: #6E8074;
+    --brand: #46CE7E;
+    --brand-deep: #7FE3A6;
+    --brand-tint: #17301F;
+    --focus-ring: #6FE3A0;
+  }
 
-        .social-links {
-            margin-top: 20px;
-        }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
 
-        .social-links a {
-            color: #2c3e50;
-            text-decoration: none;
-            font-weight: bold;
-            margin: 0 15px;
-            transition: color 0.3s;
-        }
+  body {
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.7;
+    color: var(--ink);
+    background: var(--paper);
+  }
 
-        .social-links a:hover {
-            color: #3498db;
-        }
+  img { max-width: 100%; display: block; }
+  a { color: inherit; text-decoration: none; }
+  :focus-visible { outline: 2.5px solid var(--focus-ring); outline-offset: 2px; }
 
-        .projects {
-            padding: 40px 0;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-        }
+  .wrap { max-width: var(--max-width); margin: 0 auto; padding: 0 24px; }
 
-        .project-card {
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
+  h1, h2 { text-wrap: balance; font-family: var(--font-display); font-weight: 400; letter-spacing: 0.01em; }
 
-        .project-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-        }
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
 
-        .project-card h3 {
-            color: #2c3e50;
-            margin-top: 0;
-        }
+  .num { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
 
-        .project-card p {
-            color: #555;
-        }
+  /* ---------------- board (header + hero) ---------------- */
+  .board {
+    background: linear-gradient(180deg, var(--board-bg) 0%, var(--board-bg-2) 100%);
+    color: var(--board-ink);
+  }
 
-        .project-card a {
-            display: inline-block;
-            margin-top: 10px;
-            padding: 8px 15px;
-            background-color: #3498db;
-            color: #fff;
-            text-decoration: none;
-            border-radius: 4px;
-            transition: background-color 0.3s;
-        }
+  header.board {
+    position: sticky;
+    top: 0;
+    z-index: 30;
+    border-bottom: 1px solid var(--board-line);
+  }
 
-        .project-card a:hover {
-            background-color: #2980b9;
-        }
+  .nav-row { display: flex; align-items: center; justify-content: space-between; height: 68px; gap: 20px; }
 
-        footer {
-            text-align: center;
-            padding: 20px;
-            background-color: #2c3e50;
-            color: #ecf0f1;
-        }
-    </style>
+  .logo { display: flex; align-items: center; gap: 10px; font-family: var(--font-display); font-size: 17px; }
+  .logo svg { width: 22px; height: 22px; fill: var(--led); flex-shrink: 0; }
+
+  nav.links { display: none; gap: 28px; font-size: 14.5px; color: var(--board-ink-sub); font-weight: 500; }
+  nav.links a:hover { color: var(--board-ink); }
+  @media (min-width: 760px) { nav.links { display: flex; } }
+
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    padding: 12px 22px; border-radius: 6px; font-weight: 600; font-size: 14.5px;
+    cursor: pointer; border: 1.5px solid transparent; white-space: nowrap;
+    font-family: var(--font-body);
+  }
+  .btn-primary { background: var(--brand-deep); color: #F4FBF6; }
+  .btn-primary:hover { filter: brightness(1.12); }
+  .btn-ghost-board { border-color: var(--board-line); color: var(--board-ink); }
+  .btn-ghost-board:hover { background: rgba(244, 247, 241, 0.06); }
+  .btn-ghost-paper { border-color: var(--paper-line); color: var(--ink); }
+  .btn-ghost-paper:hover { background: var(--brand-tint); }
+
+  .header-cta { display: none; }
+  @media (min-width: 560px) { .header-cta { display: inline-flex; } }
+
+  .hero { padding: 64px 0 0; overflow: hidden; }
+
+  .hero-top {
+    display: grid; grid-template-columns: 1fr; gap: 16px; padding-bottom: 44px;
+  }
+
+  .hero .eyebrow { color: var(--led); margin-bottom: 18px; display: block; }
+
+  .hero h1 { font-size: clamp(30px, 5.4vw, 52px); line-height: 1.24; margin: 0 0 20px; max-width: 760px; }
+  .hero h1 em { font-style: normal; color: var(--led); }
+
+  .hero-desc { color: var(--board-ink-sub); font-size: 16.5px; max-width: 500px; margin: 0 0 32px; }
+
+  .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 8px; }
+
+  /* ticker (전광판 시세 스크롤) */
+  .ticker-frame {
+    border-top: 1px solid var(--board-line);
+    background: rgba(0, 0, 0, 0.18);
+    overflow: hidden;
+  }
+  .ticker-label {
+    max-width: var(--max-width); margin: 0 auto; padding: 10px 24px 0;
+    font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.14em;
+    color: var(--board-ink-sub); text-transform: uppercase;
+  }
+  .ticker-track {
+    display: flex; width: max-content;
+    animation: ticker-scroll 34s linear infinite;
+  }
+  @media (prefers-reduced-motion: reduce) { .ticker-track { animation: none; } }
+  @keyframes ticker-scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+  .ticker-set { display: flex; }
+  .ticker-item {
+    display: flex; align-items: baseline; gap: 14px;
+    padding: 16px 28px; border-right: 1px solid var(--board-line);
+    white-space: nowrap;
+  }
+  .ticker-item .gname { font-weight: 600; font-size: 14.5px; }
+  .ticker-item .gmarket { color: var(--board-ink-sub); font-size: 12px; }
+  .ticker-item .gprice { font-family: var(--font-mono); color: var(--led); font-size: 19px; letter-spacing: -0.02em; }
+  .ticker-item .gunit { color: var(--board-ink-sub); font-size: 11px; }
+
+  /* ---------------- paper sections ---------------- */
+  main { background: var(--paper); }
+  section { padding: 88px 0; }
+  section.raised { background: var(--paper-raised); }
+
+  .section-head { max-width: 620px; margin: 0 0 44px; }
+  .section-head .eyebrow { color: var(--brand); display: block; margin-bottom: 12px; }
+  .section-head h2 { font-size: clamp(24px, 3.2vw, 32px); margin: 0 0 12px; }
+  .section-head p { color: var(--ink-sub); font-size: 16px; margin: 0; max-width: 60ch; }
+
+  /* feature ledger */
+  .ledger { border-top: 1px solid var(--paper-line); }
+  .ledger-row {
+    display: grid; grid-template-columns: 64px 1fr; gap: 20px;
+    padding: 26px 0; border-bottom: 1px solid var(--paper-line);
+  }
+  @media (min-width: 720px) { .ledger-row { grid-template-columns: 64px 240px 1fr; align-items: baseline; } }
+
+  .ledger-code {
+    font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.06em;
+    color: var(--brand); padding-top: 3px;
+  }
+  .ledger-row h3 { font-size: 17px; margin: 0; font-weight: 700; font-family: var(--font-body); }
+  .ledger-row p { margin: 6px 0 0; color: var(--ink-sub); font-size: 14.5px; max-width: 56ch; }
+  @media (min-width: 720px) { .ledger-row p { margin: 0; } }
+
+  /* stats strip */
+  .stats-strip {
+    border: 1px solid var(--paper-line); border-radius: 8px; overflow: hidden;
+    display: grid; grid-template-columns: repeat(2, 1fr);
+  }
+  @media (min-width: 720px) { .stats-strip { grid-template-columns: repeat(4, 1fr); } }
+  .stat-cell {
+    padding: 28px 22px; border-right: 1px solid var(--paper-line); border-bottom: 1px solid var(--paper-line);
+  }
+  .stat-cell:nth-child(2n) { border-right: none; }
+  @media (min-width: 720px) {
+    .stat-cell { border-bottom: none; }
+    .stat-cell:nth-child(2n) { border-right: 1px solid var(--paper-line); }
+    .stat-cell:last-child { border-right: none; }
+  }
+  .stat-num { font-family: var(--font-mono); font-size: clamp(28px, 3.4vw, 38px); color: var(--brand-deep); letter-spacing: -0.02em; }
+  .stat-label { font-size: 13px; color: var(--ink-sub); margin-top: 8px; }
+
+  /* pipeline */
+  .pipeline { display: grid; grid-template-columns: 1fr; gap: 0; }
+  @media (min-width: 860px) { .pipeline { grid-template-columns: repeat(4, 1fr); } }
+
+  .lot {
+    position: relative; padding: 22px 22px 22px 0; border-bottom: 1px solid var(--paper-line);
+  }
+  @media (min-width: 860px) {
+    .lot { border-bottom: none; border-right: 1px solid var(--paper-line); padding: 4px 24px; }
+    .lot:last-child { border-right: none; }
+  }
+  .lot-num { font-family: var(--font-mono); font-size: 13px; color: var(--brand); display: block; margin-bottom: 10px; }
+  .lot h4 { margin: 0 0 6px; font-size: 15.5px; font-weight: 700; }
+  .lot p { margin: 0; font-size: 13.5px; color: var(--ink-sub); }
+
+  /* download */
+  .download-panel {
+    background: var(--brand-deep); color: #F4FBF6; border-radius: 10px;
+    padding: 56px 32px; display: grid; grid-template-columns: 1fr; gap: 32px; align-items: center;
+  }
+  @media (min-width: 800px) { .download-panel { grid-template-columns: 1.2fr 0.8fr; padding: 56px 48px; } }
+  .download-panel .eyebrow { color: #BFEAC9; display: block; margin-bottom: 12px; }
+  .download-panel h2 { font-size: 28px; margin: 0 0 14px; color: #fff; }
+  .download-panel p { color: #D6EEDB; margin: 0 0 26px; max-width: 460px; font-size: 15px; }
+  .download-panel .btn-primary { background: #F4FBF6; color: var(--brand-deep); }
+
+  .qr-box {
+    justify-self: center; width: 156px; height: 156px; border-radius: 6px;
+    background: rgba(244, 251, 246, 0.06); border: 1px dashed rgba(244, 251, 246, 0.35);
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;
+    font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.08em; text-align: center; color: #D6EEDB;
+    padding: 12px;
+  }
+
+  /* footer */
+  footer { border-top: 1px solid var(--paper-line); padding: 32px 0; font-size: 13px; color: var(--ink-sub); }
+  .footer-row { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 14px; }
+  .footer-links { display: flex; gap: 18px; }
+</style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>농산물 경매 정보 제공</h1>
-            <p>농산물 정보 조회를 잘할 수 있게 최선을 다하겠습니다.</p>
-        </header>
 
-        <section class="projects">
-            <div class="project-card">
-                <h3>PlayStore 농산물 시세 앱</h3>
-                <p>우리 농민들 화이팅입니다. 많이 이용해 주셔요</p>
-                <a href="https://play.google.com/store/apps/details?id=net.dowoo.app.agrimetric" target="_blank">플레이스토어에서 보기</a>
-            </div>
-
-            <div class="project-card">
-                <h3>AppStore 농산물 시세 앱</h3>
-                <p>준비중입니다. 조금만 기다려주세요</p>
-            </div>
-        </section>
+<header class="board">
+  <div class="wrap nav-row">
+    <div class="logo">
+      <svg viewBox="0 0 24 24"><g transform="rotate(-45 12 12)"><rect x="6" y="4" width="12" height="6" rx="1.4"></rect><rect x="10.5" y="10" width="3" height="10" rx="1.4"></rect></g><rect x="4" y="19.4" width="16" height="2.2" rx="1.1"></rect></svg>
+      농산물경매
     </div>
+    <nav class="links">
+      <a href="#features">기능</a>
+      <a href="#data">데이터</a>
+      <a href="#how">동작 방식</a>
+      <a href="#download">다운로드</a>
+    </nav>
+    <a class="btn btn-primary header-cta" href="#download">앱 다운로드</a>
+  </div>
+</header>
 
-    <footer>
-        <p>&copy; 2025 Dowoo. All Rights Reserved.</p>
-    </footer>
+<section class="board hero">
+  <div class="wrap hero-top">
+    <span class="eyebrow">Live Wholesale Auction Board</span>
+    <h1>오늘의 경매가를<br><em>전광판처럼</em> 바로 확인하세요</h1>
+    <p class="hero-desc">
+      전국 도매시장과 법인의 경매 결과를 하루 5회 자동으로 수집해
+      품목별 시세 흐름과 품종별 최고가를 정리합니다.
+      관심 품목은 즐겨찾기에 등록해 경매 알림까지 받아보세요.
+    </p>
+    <div class="hero-actions">
+      <a class="btn btn-primary" href="https://play.google.com/store/apps/details?id=net.dowoo.app.agrimetric&hl=ko" target="_blank" rel="noopener">Google Play에서 다운로드</a>
+      <a class="btn btn-ghost-board" href="#features">기능 살펴보기</a>
+    </div>
+  </div>
+
+  <div class="ticker-frame">
+    <div class="ticker-label">오늘의 품종별 최고가 (예시)</div>
+    <div class="ticker-track">
+      <div class="ticker-set">
+        <div class="ticker-item"><span class="gname">사과 · 홍로</span><span class="gmarket">안동원예농협</span><span class="gprice num">58,000</span><span class="gunit">10kg 상자</span></div>
+        <div class="ticker-item"><span class="gname">배추</span><span class="gmarket">서울가락공판장</span><span class="gprice num">12,400</span><span class="gunit">10kg 망</span></div>
+        <div class="ticker-item"><span class="gname">무</span><span class="gmarket">부산엄궁공판장</span><span class="gprice num">15,800</span><span class="gunit">20kg 망</span></div>
+        <div class="ticker-item"><span class="gname">포도 · 샤인머스캣</span><span class="gmarket">상주원예농협</span><span class="gprice num">24,500</span><span class="gunit">2kg 상자</span></div>
+        <div class="ticker-item"><span class="gname">감자 · 수미</span><span class="gmarket">강릉원예농협</span><span class="gprice num">21,200</span><span class="gunit">20kg 망</span></div>
+      </div>
+      <div class="ticker-set" aria-hidden="true">
+        <div class="ticker-item"><span class="gname">사과 · 홍로</span><span class="gmarket">안동원예농협</span><span class="gprice num">58,000</span><span class="gunit">10kg 상자</span></div>
+        <div class="ticker-item"><span class="gname">배추</span><span class="gmarket">서울가락공판장</span><span class="gprice num">12,400</span><span class="gunit">10kg 망</span></div>
+        <div class="ticker-item"><span class="gname">무</span><span class="gmarket">부산엄궁공판장</span><span class="gprice num">15,800</span><span class="gunit">20kg 망</span></div>
+        <div class="ticker-item"><span class="gname">포도 · 샤인머스캣</span><span class="gmarket">상주원예농협</span><span class="gprice num">24,500</span><span class="gunit">2kg 상자</span></div>
+        <div class="ticker-item"><span class="gname">감자 · 수미</span><span class="gmarket">강릉원예농협</span><span class="gprice num">21,200</span><span class="gunit">20kg 망</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<main>
+
+<section id="features">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Features</span>
+      <h2>이런 정보를 확인할 수 있어요</h2>
+      <p>매일 쌓이는 경매 데이터를 보기 쉬운 형태로 정리해 제공합니다.</p>
+    </div>
+    <div class="ledger">
+      <div class="ledger-row">
+        <div class="ledger-code">MKT</div>
+        <h3>도매시장 · 법인별 경매가</h3>
+        <p>도매시장과 법인을 선택해 그날 경매된 낙찰가와 물량을 바로 조회할 수 있어요.</p>
+      </div>
+      <div class="ledger-row">
+        <div class="ledger-code">TRD</div>
+        <h3>품목별 시세 흐름</h3>
+        <p>최근 14일간의 출하량과 평균가를 모아 시세 변화를 한눈에 파악할 수 있어요.</p>
+      </div>
+      <div class="ledger-row">
+        <div class="ledger-code">BEST</div>
+        <h3>품종별 최고가</h3>
+        <p>같은 품목이라도 품종(소분류)별로 그날 가장 높게 낙찰된 가격과 생산지를 보여줘요.</p>
+      </div>
+      <div class="ledger-row">
+        <div class="ledger-code">FAV</div>
+        <h3>즐겨찾기 · 알림</h3>
+        <p>관심 있는 도매시장·법인·품목 조합을 즐겨찾기에 등록하면 경매 알림을 받아볼 수 있어요.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="data" class="raised">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Data Pipeline</span>
+      <h2>데이터는 이렇게 모입니다</h2>
+      <p>공공데이터포털 농산물 유통정보(datago)를 기반으로 매일 자동 수집·집계됩니다.</p>
+    </div>
+    <div class="stats-strip">
+      <div class="stat-cell"><div class="stat-num num">16</div><div class="stat-label">필터링된 주요 품목</div></div>
+      <div class="stat-cell"><div class="stat-num num">14<span style="font-size:0.55em;">일</span></div><div class="stat-label">시세 트렌드 제공 기간</div></div>
+      <div class="stat-cell"><div class="stat-num num">5<span style="font-size:0.55em;">회</span></div><div class="stat-label">하루 자동 수집 횟수</div></div>
+      <div class="stat-cell"><div class="stat-num" style="font-family:var(--font-display); font-size:clamp(22px,2.6vw,30px);">전국</div><div class="stat-label">도매시장 · 법인 연동</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="how">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">How It Works</span>
+      <h2>데이터가 만들어지는 과정</h2>
+      <p>원본 경매 데이터부터 앱 화면까지, 매일 반복되는 4단계 파이프라인입니다.</p>
+    </div>
+    <div class="pipeline">
+      <div class="lot"><span class="lot-num num">01</span><h4>원본 데이터 수집</h4><p>도매시장·법인별 경매 원본 데이터를 하루 5회 수집합니다.</p></div>
+      <div class="lot"><span class="lot-num num">02</span><h4>도매시장 · 품목별 집계</h4><p>도매시장, 법인, 품목, 날짜 기준으로 출하량과 평균가를 계산합니다.</p></div>
+      <div class="lot"><span class="lot-num num">03</span><h4>품종별 최고가 계산</h4><p>품종(소분류)까지 나눠 그날의 최고 낙찰가 기록을 뽑아냅니다.</p></div>
+      <div class="lot"><span class="lot-num num">04</span><h4>앱으로 반영</h4><p>정리된 데이터를 서버에 반영해 앱 화면에서 바로 확인할 수 있게 합니다.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="download" class="raised">
+  <div class="wrap">
+    <div class="download-panel">
+      <div>
+        <span class="eyebrow">Get the App</span>
+        <h2>지금 농산물경매 앱을 받아보세요</h2>
+        <p>매일 갱신되는 도매시장 경매 데이터를 스마트폰에서 바로 확인하세요. 관심 품목을 즐겨찾기하면 경매 알림도 받아볼 수 있어요.</p>
+        <a class="btn btn-primary" href="https://play.google.com/store/apps/details?id=net.dowoo.app.agrimetric&hl=ko" target="_blank" rel="noopener">Google Play에서 다운로드</a>
+      </div>
+      <div class="qr-box">
+        <!-- TODO: android/AgriMetric/app/src/main/res/drawable-nodpi/agrimetric_playstore_qr.jpeg 실제 QR 이미지로 교체 -->
+        QR CODE<br>스캔해서 설치
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap footer-row">
+    <div>© 2026 dowoo. All rights reserved.</div>
+    <div class="footer-links">
+      <!-- TODO: 실제 문의 연락처로 교체 -->
+      <a href="#">문의하기</a>
+      <a href="#">개인정보처리방침</a>
+    </div>
+  </div>
+</footer>
+
 </body>
 </html>
