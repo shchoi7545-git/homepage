@@ -1,0 +1,93 @@
+title: 고객지원 — Dowoo 도우
+desc: 도우가 만드는 앱의 자주 묻는 질문과 문의 창구를 한 곳에서 확인하세요. 앱을 선택하면 해당 서비스의 안내로 바로 이동합니다.
+path: /support/
+nav: support
+---
+    <section class="page-hero">
+      <div class="wrap">
+        <p class="kicker reveal">Support</p>
+        <h1 class="reveal">무엇을 도와드릴까요?</h1>
+        <p class="page-lead reveal">
+          이용 중인 서비스를 선택하면 자주 묻는 질문과 문의 방법을 바로 확인할 수 있습니다.
+          새로운 서비스가 출시되면 이 페이지에 안내가 함께 추가됩니다.
+        </p>
+        <!--
+          새 서비스가 출시되면: 아래 app-picker 에 항목 하나, 이 페이지 하단에 .support-app 섹션 하나를
+          같은 패턴으로 추가하면 된다(각 섹션의 id 가 스토어 Support URL 의 #앵커가 됨,
+          예: https://dowoo.net/support#agrimetric).
+        -->
+        <nav class="app-picker reveal" aria-label="서비스 선택">
+          <a class="app-pick" href="#agrimetric">
+            <img src="/assets/agrimetric-icon.png" width="30" height="30" alt="">
+            AgriMetric
+          </a>
+        </nav>
+      </div>
+    </section>
+
+    <section class="section tight">
+      <div class="wrap narrow">
+
+        <article class="support-app" id="agrimetric">
+          <div class="support-app-head reveal">
+            <img src="/assets/agrimetric-icon.png" width="56" height="56" alt="AgriMetric 아이콘">
+            <div>
+              <h2>AgriMetric 고객지원</h2>
+              <p>농산물 도매시장 시세 서비스 — 출하량 · 최고가 · 실시간 경매결과</p>
+            </div>
+          </div>
+
+          <div class="store-row reveal" style="margin-top:22px">
+            <a class="store" href="https://play.google.com/store/apps/details?id=net.dowoo.app.agrimetric" target="_blank" rel="noopener"><small>Android</small><b>Google Play</b></a>
+            <span class="store off"><small>iOS</small><b>App Store (링크 준비 중)</b></span>
+            <a class="store web" href="https://agrimetric.dowoo.net" target="_blank" rel="noopener"><small>Web</small><b>agrimetric.dowoo.net</b></a>
+          </div>
+
+          <h3 class="reveal" style="margin-top:36px;font-size:1.15rem;font-weight:800;color:var(--ink)">자주 묻는 질문</h3>
+          <div class="faq reveal">
+            <details class="faq-item">
+              <summary>경매 데이터는 얼마나 자주 갱신되나요?</summary>
+              <p class="faq-a">도매시장별로 하루 동안 여러 차례 자동으로 수집해 반영합니다. 품목마다 경매가 끝나는 시각이 달라, 이른 시간에는 아직 그날 데이터가 다 반영되지 않았을 수 있습니다.</p>
+            </details>
+            <details class="faq-item">
+              <summary>원하는 도매시장·법인·품목 데이터가 안 보여요.</summary>
+              <p class="faq-a">해당 시장의 그날 경매가 아직 끝나지 않았거나, 원본 데이터(공공데이터포털)의 반영이 늦어졌을 수 있습니다. 일요일은 전국 도매시장이 쉬는 날이라 데이터가 없는 게 정상입니다. 시간이 지나도 계속 안 보이면 아래 이메일로 알려주세요.</p>
+            </details>
+            <details class="faq-item">
+              <summary>화면에 나온 가격이 실제 거래가와 다른 것 같아요.</summary>
+              <p class="faq-a">이 앱의 가격 정보는 공공데이터포털(data.go.kr)이 제공하는 도매시장 경매 결과를 그대로 가져와 계산한 참고용 정보입니다. 원본 데이터가 사후에 수정되는 경우가 있어 일시적으로 차이가 있을 수 있습니다.</p>
+            </details>
+            <details class="faq-item">
+              <summary>즐겨찾기한 품목의 경매 시작 알림이 오지 않아요.</summary>
+              <p class="faq-a">즐겨찾기 알림은 기기가 주기적으로 서버 데이터를 확인해 보내드립니다. 기기의 알림 권한이 꺼져 있거나, 배터리 최적화 설정으로 앱이 제한돼 있으면 알림이 늦거나 오지 않을 수 있습니다. 설정에서 이 두 가지를 먼저 확인해 주세요.</p>
+            </details>
+            <details class="faq-item">
+              <summary>로그인이나 회원가입이 꼭 필요한가요?</summary>
+              <p class="faq-a">앱은 로그인 없이 바로 이용할 수 있고, 즐겨찾기는 기기에 저장됩니다. 웹 버전은 여러 기기에서 즐겨찾기를 이어서 쓰고 싶은 분들을 위해 선택적으로 회원가입을 제공합니다.</p>
+            </details>
+            <details class="faq-item">
+              <summary>광고가 표시되는 이유가 궁금해요.</summary>
+              <p class="faq-a">무료로 서비스를 제공하기 위해 Google AdMob 광고를 사용합니다. 광고 관련 자세한 내용은 <a href="/privacy/">개인정보처리방침</a>에서 확인하실 수 있습니다.</p>
+            </details>
+            <details class="faq-item">
+              <summary>유료 결제나 구독이 있나요?</summary>
+              <p class="faq-a">없습니다. AgriMetric은 현재 무료로 제공되는 서비스입니다.</p>
+            </details>
+            <details class="faq-item">
+              <summary>버그를 발견했거나 기능을 제안하고 싶어요.</summary>
+              <p class="faq-a">아래 이메일로 사용 중인 기기·화면과 함께 보내주시면 확인 후 답변드립니다.</p>
+            </details>
+          </div>
+
+          <h3 class="reveal" style="margin-top:36px;font-size:1.15rem;font-weight:800;color:var(--ink)">직접 문의하기</h3>
+          <p class="reveal" style="margin-top:10px;color:var(--muted)">
+            FAQ에서 답을 못 찾으셨다면 아래 이메일로 편하게 보내주세요. 확인 후 답변드립니다.
+          </p>
+          <div class="support-links reveal">
+            <a class="btn dark" href="mailto:dowoohome@gmail.com?subject=%5BAgriMetric%20%EB%AC%B8%EC%9D%98%5D">이메일로 문의하기</a>
+            <a class="btn line" href="/privacy/">개인정보처리방침</a>
+          </div>
+        </article>
+
+      </div>
+    </section>
