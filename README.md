@@ -1,6 +1,7 @@
-# Dowoo 홈페이지 (www.dowoo.net)
+# DOWOONET 홈페이지 (www.dowoo.net)
 
-도우 회사/서비스 포털. 빌드 도구가 필요 없는 정적 사이트(HTML/CSS/JS)이며 GitHub Pages(`shchoi7545-git` 공개 저장소)로
+도우넷(DOWOONET) 회사/서비스 포털. 예전 상호 "도우/Dowoo"는 특허청 확인 결과 상호로 쓸 수 없어
+"도우넷/DOWOONET"으로 변경함(2026-09-28) — 도메인(`dowoo.net`)은 그대로 유지. 빌드 도구가 필요 없는 정적 사이트(HTML/CSS/JS)이며 GitHub Pages(`shchoi7545-git` 공개 저장소)로
 배포한다. 우아한형제들 회사 사이트 같은 "회사 + 서비스 포트폴리오" 구조를 참고했고, 화면과 문구는 새로 만들었다.
 농산물 시세 서비스 자체는 `agrimetric.dowoo.net`(web/AgriMetric)에서 보여주고, 이 사이트는 회사 소개 역할만 한다.
 
