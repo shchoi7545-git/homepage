@@ -217,6 +217,28 @@ a.store:hover { transform: translateY(-2px); background: var(--blue); }
 .feat p { margin-top: 6px; font-size: .95rem; color: var(--muted); }
 .note { padding: 16px 18px; border-radius: 14px; background: var(--alt); color: var(--muted); font-size: .9rem; }
 .section.alt .note { background: #fff; }
+.feat-title { margin-top: 40px; font-size: 1.3rem; font-weight: 800; letter-spacing: -0.03em; color: var(--ink); }
+.feat-lead { margin-top: 8px; color: #374151; }
+.feat-title + .feat { margin-top: 16px; }
+.trend { display: grid; gap: 16px; margin: 20px 0 8px; }
+.trend > li { position: relative; padding: 26px 26px 24px; border: 1px solid var(--line); border-radius: 20px; background: #fff; }
+.trend-num { display: inline-block; padding: 2px 10px; border-radius: 999px; background: var(--agri-soft); color: var(--agri); font-size: .78rem; font-weight: 800; }
+.trend h4 { margin: 10px 0 0; font-size: 1.15rem; font-weight: 800; color: var(--ink); }
+.trend-sub { margin-top: 2px; font-size: .92rem; color: var(--agri); font-weight: 600; }
+.trend ul { margin-top: 12px; display: grid; gap: 8px; }
+.trend ul li { position: relative; padding-left: 16px; font-size: .95rem; color: var(--muted); }
+.trend ul li::before { content: ""; position: absolute; left: 2px; top: .7em; width: 6px; height: 6px; border-radius: 50%; background: var(--agri); }
+/* 앱 설치 QR (PC 전용 — 휴대폰에서는 스토어 버튼을 바로 누르면 되므로 720px 이하에서 숨김) */
+.qr-row { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 14px; margin-top: 18px; }
+.qr-item { margin: 0; text-align: center; }
+.qr-item img { display: block; width: 120px; height: 120px; object-fit: contain; padding: 6px; background: #fff; border: 1px solid var(--line); border-radius: 14px; }
+.qr-item figcaption { margin-top: 6px; font-size: .8rem; font-weight: 700; color: var(--muted); }
+.qr-note { flex-basis: 100%; font-size: .82rem; color: var(--muted); }
+/* 사용 가이드 영상 (YouTube Shorts, 세로 9:16) */
+.video-guide { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 20px; margin: 16px 0 8px; }
+.video-guide iframe { flex: 0 0 auto; width: 280px; max-width: 100%; aspect-ratio: 9 / 16; height: auto; border: 0; border-radius: 18px; background: #000; }
+.video-guide p { flex: 1 1 200px; font-size: .95rem; color: var(--muted); }
+.video-guide a { color: var(--blue); font-weight: 700; }
 
 /* ---------- contact ---------- */
 .contact-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
@@ -300,6 +322,7 @@ a.store:hover { transform: translateY(-2px); background: var(--blue); }
   .store { flex: 1 1 100%; min-width: 0; }
   .support-app-head { gap: 12px; }
   .support-app-head img { width: 46px; height: 46px; }
+  .qr-row { display: none; }
 }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
