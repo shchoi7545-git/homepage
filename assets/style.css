@@ -50,14 +50,10 @@ b { font-weight: 700; }
 .site-header.scrolled { border-bottom-color: var(--line); }
 .header-inner { display: flex; align-items: center; justify-content: space-between; height: 100%; }
 
-.logo { display: inline-flex; align-items: center; gap: 10px; }
-.logo-mark {
-  position: relative; width: 28px; height: 28px; border-radius: 9px; background: var(--ink); flex: none;
-}
-.logo-mark::before { content: ""; position: absolute; inset: 7px; border: 3.5px solid #fff; border-radius: 50%; }
-.logo-mark::after { content: ""; position: absolute; top: 4px; right: 3px; width: 6px; height: 6px; border-radius: 50%; background: var(--blue); }
-.logo-text { font-weight: 800; font-size: 1.28rem; letter-spacing: -0.03em; color: var(--ink); }
-.logo-ko { margin-left: 6px; font-size: .78rem; font-weight: 600; color: var(--muted); letter-spacing: 0; }
+.logo { display: inline-flex; align-items: center; gap: 12px; }
+/* 영문명(DOWOONET) 글자 로고. 원본(1767px)을 브라우저가 크게 축소하면 계단 현상이 생겨서
+   표시 크기에 맞춰 미리 줄인 _1x/_2x/_3x 이미지를 srcset 으로 사용 */
+.logo-name { width: auto; height: 22px; }
 
 .nav { display: flex; align-items: center; gap: 6px; }
 .nav a { padding: 8px 14px; border-radius: 999px; font-weight: 600; font-size: .98rem; color: var(--text); transition: background .15s, color .15s; }
@@ -126,6 +122,8 @@ b { font-weight: 700; }
 
 .page-hero { padding: 88px 0 40px; }
 .page-hero h1 { margin-top: 14px; font-size: clamp(2rem, 5.5vw, 3.6rem); line-height: 1.25; font-weight: 800; letter-spacing: -0.04em; color: var(--ink); }
+.hero-split { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 48px; }
+.hero-logo { width: 260px; height: 260px; border: 1px solid var(--line); border-radius: var(--radius); }
 .page-lead { margin-top: 20px; max-width: 34em; font-size: 1.12rem; color: var(--muted); }
 
 /* ---------- service cards ---------- */
@@ -316,6 +314,8 @@ a.store:hover { transform: translateY(-2px); background: var(--blue); }
   .section { padding: 68px 0; }
   .section.tight { padding: 48px 0; }
   .page-hero { padding: 56px 0 24px; }
+  .hero-split { grid-template-columns: 1fr; gap: 24px; }
+  .hero-logo { order: -1; width: 140px; height: 140px; border-radius: 18px; }
   .feat { grid-template-columns: 1fr; }
   .facts > div { grid-template-columns: 1fr; gap: 4px; }
   .cta-band { padding: 64px 0; }
