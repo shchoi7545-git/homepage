@@ -14,7 +14,7 @@ import os, re, sys
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 SRC = os.path.join(ROOT, "_src")
-NAVS = ["company", "services", "support"]
+NAVS = ["company", "services", "guide", "support"]
 SITE = "https://www.dowoo.net"
 
 base = open(os.path.join(SRC, "base.html"), encoding="utf-8").read()
